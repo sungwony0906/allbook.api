@@ -40,8 +40,15 @@ dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // jasypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+
+    // OAuth2
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-oauth2', version: '2.2.5.RELEASE'
 }
 
 test {
     useJUnitPlatform()
+    systemProperty("jasypt.encryptor.password", project.getProperties().get("jasypt.encryptor.password"))
 }

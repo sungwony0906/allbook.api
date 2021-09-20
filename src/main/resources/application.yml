@@ -7,8 +7,18 @@ spring:
     group:
       "local": "console-logging"
       "test": "console-logging"
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: ENC(cwyK3oo8dnJA4c/qEStJLg1faUPtv4MJ+7yhll/jn7Y=)
+            clientSecret: ENC(nLFU2PYlt42NSHqHSIN2hoZWKxYgWbIPF00LQMQZHl+cBV5ObjPPFbndugKwVFaXDpk4AodQfWk=)
 
   jpa:
     hibernate:
       ddl-auto: validate
 
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
