@@ -12,9 +12,11 @@ spring:
       client:
         registration:
           github:
-            clientId: ENC(cwyK3oo8dnJA4c/qEStJLg1faUPtv4MJ+7yhll/jn7Y=)
-            clientSecret: ENC(nLFU2PYlt42NSHqHSIN2hoZWKxYgWbIPF00LQMQZHl+cBV5ObjPPFbndugKwVFaXDpk4AodQfWk=)
-
+            clientId: ENC(EIVCzgqafommyot7lMuFCsYBWxpBKODZ/F9goFbqIok=)
+            clientSecret: ENC(5q2Q/UcoHU05cg6la7MjPkw6Ef4tpSf4Zlkd5LnuIj+KHbhJ2HtqoY2myM7RI85r1x3v3ypgfJE=)
+          google:
+            clientId: ENC(p2++R6kQzh9uBIJGHTd1Kww3FkA1RdBkWwIeH4UyYvHsIwMIaaFFKhXW5l1H5KTlJ3sOLAYo0H7lrIRTNlakuGm5dfnm0ZzQ+pLdy6UYO6Ud99EXsuj+Uw==)
+            clientSecret: ENC(0zhjvaqI5q5jBQeRpP7HSOKGIp4FWBAq/V6/xpbRLSEpSa8CVaIfEw==)
   jpa:
     hibernate:
       ddl-auto: validate
