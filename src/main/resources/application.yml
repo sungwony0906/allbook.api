@@ -14,13 +14,24 @@ spring:
           github:
             clientId: ENC(EIVCzgqafommyot7lMuFCsYBWxpBKODZ/F9goFbqIok=)
             clientSecret: ENC(5q2Q/UcoHU05cg6la7MjPkw6Ef4tpSf4Zlkd5LnuIj+KHbhJ2HtqoY2myM7RI85r1x3v3ypgfJE=)
+            scope: profile, email
           google:
             clientId: ENC(p2++R6kQzh9uBIJGHTd1Kww3FkA1RdBkWwIeH4UyYvHsIwMIaaFFKhXW5l1H5KTlJ3sOLAYo0H7lrIRTNlakuGm5dfnm0ZzQ+pLdy6UYO6Ud99EXsuj+Uw==)
             clientSecret: ENC(0zhjvaqI5q5jBQeRpP7HSOKGIp4FWBAq/V6/xpbRLSEpSa8CVaIfEw==)
+            scope: profile, email
   jpa:
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
 
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+logging:
+  level:
+   org.hibernate.SQL: debug
+   org.hibernate.type: trace
