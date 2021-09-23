@@ -2,6 +2,7 @@ package com.starsource.allbook.goods.domain;
 
 import com.starsource.allbook.common.entity.BaseEntity;
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,6 +21,7 @@ public class Goods extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "goods_id")
     private Long id;
 
     private String name;
