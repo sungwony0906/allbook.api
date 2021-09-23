@@ -18,7 +18,6 @@ import com.starsource.allbook.goods.service.GoodsService;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,39 @@ class GoodsApiControllerTest {
     ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Test
-    void save_goods_성공() throws Exception {
+    void 상품_저장_실패_파라미터_없음() throws Exception {
+        //given
+        String name = "anyName";
+        LocalDateTime now = LocalDateTime.now();
+        GoodsResponseDto mockResponseDto = makeGoodsResponseDto(name, now);
+
+        doReturn(mockResponseDto).when(goodsService).save(any(GoodsSaveRequestDto.class));
+
+        //when
+        mockMvc.perform(post("/api/v1/goods")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void 상품_저장_실패_파라미터_불충분() throws Exception {
+        //given
+        String name = "anyName";
+        LocalDateTime now = LocalDateTime.now();
+        GoodsResponseDto mockResponseDto = makeGoodsResponseDto(name, now);
+        GoodsSaveRequestDto requestDto = new GoodsSaveRequestDto(null, GoodsStatus.ACTIVE, now,
+                now.plusDays(1));
+
+        doReturn(mockResponseDto).when(goodsService).save(any(GoodsSaveRequestDto.class));
+
+        //when
+        mockMvc.perform(post("/api/v1/goods")
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void 상품_저장_성공() throws Exception {
         //given
         String name = "anyName";
         LocalDateTime now = LocalDateTime.now();
@@ -76,7 +107,7 @@ class GoodsApiControllerTest {
     }
 
     @Test
-    void findAll_성공() throws Exception {
+    void 상품_전체조회_성공() throws Exception {
         //given
         String name = "anyName";
         LocalDateTime now = LocalDateTime.now();
