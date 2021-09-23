@@ -73,7 +73,8 @@ class GoodsApiControllerTest {
 
         //when
         mockMvc.perform(post("/api/v1/goods")
-                                .contentType(MediaType.APPLICATION_JSON))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(mapper.writeValueAsString(requestDto)))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -92,8 +93,7 @@ class GoodsApiControllerTest {
         //when
         MvcResult mvcResult = mockMvc.perform(post("/api/v1/goods")
                                                       .contentType(MediaType.APPLICATION_JSON)
-                                                      .content(mapper.writeValueAsString(
-                                                              requestDto)))
+                                                      .content(mapper.writeValueAsString(requestDto)))
                                       .andExpect(status().isCreated())
                                       .andReturn();
 

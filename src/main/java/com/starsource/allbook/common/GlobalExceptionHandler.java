@@ -1,5 +1,6 @@
 package com.starsource.allbook.common;
 
+import com.starsource.allbook.common.dto.RestResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
-    public ResponseEntity<Void> validException(MethodArgumentNotValidException ex) {
-        log.error(ex.getMessage(), ex);
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Void> httpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<RestResponseDto> notValidException(MethodArgumentNotValidException ex) {
+        return new ResponseEntity<>(
+                new RestResponseDto(false, "Validate error : " + ex.getBindingResult().getAllErrors().get(0).getDefaultMessage()),
+                HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
