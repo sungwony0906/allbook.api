@@ -21,6 +21,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -55,6 +56,13 @@ public class Member extends BaseEntity {
     public Member update(String name, String picture) {
         this.name = name;
         this.picture = picture;
+        return this;
+    }
+
+    public Member withdraw() {
+        if(!memberStatus.equals(MemberStatus.WITHDRAW)){
+            this.memberStatus = MemberStatus.WITHDRAW;
+        }
         return this;
     }
 }
