@@ -1,6 +1,6 @@
 package com.starsource.allbook.member.domain;
 
-import com.starsource.allbook.common.entity.BaseTimeEntity;
+import com.starsource.allbook.common.entity.BaseEntity;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member extends BaseTimeEntity {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

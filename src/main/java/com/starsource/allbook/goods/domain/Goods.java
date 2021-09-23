@@ -1,6 +1,6 @@
 package com.starsource.allbook.goods.domain;
 
-import com.starsource.allbook.common.entity.BaseTimeEntity;
+import com.starsource.allbook.common.entity.BaseEntity;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Goods extends BaseTimeEntity {
+public class Goods extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
