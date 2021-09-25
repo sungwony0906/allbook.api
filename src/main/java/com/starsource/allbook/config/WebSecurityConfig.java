@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .headers().frameOptions().disable() // for h2-console
         .and()
             .authorizeRequests()
-                .antMatchers("/", "/error", "/webjars/**", "/h2-console/**", "/swagger*/**", "/v3/api-docs").permitAll()
+                .antMatchers("/", "/error", "/webjars/**", "/h2-console/**", "/swagger*/**", "/v3/api-docs", "/api/v1/members").permitAll()
                 .antMatchers("/api/**").hasAnyRole(Role.MEMBER.name())
                 .antMatchers("/admin/api/**").hasAnyRole(Role.ADMIN.name())
             .anyRequest()

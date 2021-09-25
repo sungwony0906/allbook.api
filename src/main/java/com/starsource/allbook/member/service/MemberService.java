@@ -4,7 +4,9 @@ import com.starsource.allbook.member.domain.Member;
 import com.starsource.allbook.member.domain.MemberRepository;
 import com.starsource.allbook.member.dto.MemberResponseDto;
 import com.starsource.allbook.member.dto.MemberSaveRequestDto;
+import com.starsource.allbook.member.dto.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,5 +28,13 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                                 .orElseThrow();
         return MemberResponseDto.of(member.withdraw());
+    }
+
+    public MemberResponseDto updateMember(Long id, MemberUpdateRequestDto requestDto) {
+        Member member = memberRepository.findById(id)
+                                .orElseThrow();
+        member.updateBasicInfo(requestDto.getName(), requestDto.getEmail(), requestDto.getPicture());
+        member.updateAddress(requestDto.getAddress());
+        return MemberResponseDto.of(member);
     }
 }

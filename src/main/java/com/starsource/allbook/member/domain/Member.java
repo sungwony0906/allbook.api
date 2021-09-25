@@ -13,10 +13,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.envers.Audited;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Audited
 public class Member extends BaseEntity {
 
     @Id
@@ -53,9 +56,19 @@ public class Member extends BaseEntity {
         this.memberStatus = memberStatus;
     }
 
-    public Member update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
+    public Member updateBasicInfo(String name, String email, String picture) {
+        if(StringUtils.isNotBlank(name))
+            this.name = name;
+        if(StringUtils.isNotBlank(email))
+            this.email = email;
+        if(StringUtils.isNotBlank(picture))
+            this.picture = picture;
+        return this;
+    }
+
+    public Member updateAddress(Address address){
+        if(address != null)
+            this.address = address;
         return this;
     }
 

@@ -39,6 +39,6 @@ public class MemberApiController {
     @ApiOperation(value = "회원 정보 수정")
     @PutMapping("/api/v1/members/{id}")
     public ResponseEntity updateMember(@PathVariable("id") Long id, @RequestBody @Valid MemberUpdateRequestDto requestDto) {
-        return null;
+        return ResponseEntity.ok(memberService.updateMember(id, requestDto));
     }
 }
