@@ -3,6 +3,7 @@ package com.starsource.allbook.config;
 import com.starsource.allbook.config.auth.CustomOAuth2UserService;
 import com.starsource.allbook.member.domain.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,9 +19,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
+    @Bean
+    public PasswordEncoder getPasswordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        PasswordEncoder encoder = getPasswordEncoder();
         auth.inMemoryAuthentication()
                 .passwordEncoder(encoder)
                 .withUser("spring")

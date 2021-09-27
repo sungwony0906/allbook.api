@@ -6,7 +6,6 @@ import com.starsource.allbook.member.dto.MemberResponseDto;
 import com.starsource.allbook.member.dto.MemberSaveRequestDto;
 import com.starsource.allbook.member.dto.MemberUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +35,11 @@ public class MemberService {
         member.updateBasicInfo(requestDto.getName(), requestDto.getEmail(), requestDto.getPicture());
         member.updateAddress(requestDto.getAddress());
         return MemberResponseDto.of(member);
+    }
+
+    public MemberResponseDto updatePassword(Long id, String oldPassword, String password) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow();
+        return MemberResponseDto.of(member.updatePassword(oldPassword, password));
     }
 }

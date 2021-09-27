@@ -1,6 +1,7 @@
 package com.starsource.allbook.member.domain;
 
 import com.starsource.allbook.common.entity.BaseEntity;
+import com.starsource.allbook.common.exception.PasswordMismatchException;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -15,12 +16,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.envers.Audited;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Audited
 public class Member extends BaseEntity {
+
+    @Autowired
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,17 +48,20 @@ public class Member extends BaseEntity {
 
     private String picture;
 
+    private String password;
+
     @Embedded
     private Address address;
 
     @Builder
-    public Member(String name, String email, Role role, Address address, String picture, MemberStatus memberStatus){
+    public Member(String name, String email, Role role, Address address, String picture, MemberStatus memberStatus, String password){
         this.name = name;
         this.email = email;
         this.role = role;
         this.address = address;
         this.picture = picture;
         this.memberStatus = memberStatus;
+        this.password = password;
     }
 
     public Member updateBasicInfo(String name, String email, String picture) {
@@ -76,6 +84,14 @@ public class Member extends BaseEntity {
         if(!memberStatus.equals(MemberStatus.WITHDRAW)){
             this.memberStatus = MemberStatus.WITHDRAW;
         }
+        return this;
+    }
+
+    public Member updatePassword(String oldPassword, String newPassword) {
+        if(!oldPassword.equals(this.password)){
+            throw new PasswordMismatchException();
+        }
+        this.password = newPassword;
         return this;
     }
 }

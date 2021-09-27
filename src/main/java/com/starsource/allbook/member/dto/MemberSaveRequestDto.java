@@ -10,10 +10,11 @@ import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 public class MemberSaveRequestDto {
 
     @NotNull
@@ -32,6 +33,9 @@ public class MemberSaveRequestDto {
 
     private Address address;
 
+    @NotEmpty
+    private String password;
+
     public Member toEntity() {
         return Member.builder()
                        .role(role)
@@ -40,6 +44,7 @@ public class MemberSaveRequestDto {
                        .email(email)
                        .picture(picture)
                        .address(address)
+                       .password(password)
                        .build();
     }
 }

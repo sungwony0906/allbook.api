@@ -49,7 +49,7 @@ class MemberApiControllerTest {
         //given
         Address address = new Address("city", "street", "100");
         MemberSaveRequestDto memberSaveRequestDto = new MemberSaveRequestDto(Role.MEMBER,
-                MemberStatus.ACTIVE, "tester", "tester@mail.com", "", address);
+                MemberStatus.ACTIVE, "tester", "tester@mail.com", "", address, "password");
         MemberResponseDto mockResponseDto = MemberResponseDto.of(memberSaveRequestDto.toEntity());
 
         doReturn(mockResponseDto)
