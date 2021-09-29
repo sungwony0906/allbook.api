@@ -55,8 +55,11 @@ dependencies {
     implementation 'org.webjars:js-cookie:2.1.0'
     implementation 'org.webjars:webjars-locator-core'
 
-    implementation 'org.apache.commons:commons-lang3:3.0'
-    implementation 'org.hibernate:hibernate-envers:5.4.32.Final'
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'org.hibernate:hibernate-envers'
+
+    // rest-assured
+    implementation 'io.rest-assured:rest-assured'
 }
 
 test {
