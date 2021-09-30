@@ -1,13 +1,18 @@
 package com.starsource.allbook.config.auth;
 
+import com.starsource.allbook.UserDetailsImpl;
 import com.starsource.allbook.config.auth.dto.OAuthAttributes;
 import com.starsource.allbook.config.auth.dto.SessionUser;
 import com.starsource.allbook.member.domain.Member;
 import com.starsource.allbook.member.domain.MemberRepository;
 import java.util.Collections;
+import java.util.Optional;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -18,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>, UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
@@ -50,5 +55,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .map(entity -> entity.updateBasicInfo(attributes.getName(), attributes.getEmail(), attributes.getPicture()))
                 .orElse(attributes.toEntity());
         return memberRepository.save(member);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(email)
+                                .orElseThrow();
+        return new UserDetailsImpl(member);
     }
 }

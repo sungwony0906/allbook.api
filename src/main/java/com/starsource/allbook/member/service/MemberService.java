@@ -1,10 +1,13 @@
 package com.starsource.allbook.member.service;
 
+import com.starsource.allbook.config.auth.dto.SessionUser;
 import com.starsource.allbook.member.domain.Member;
 import com.starsource.allbook.member.domain.MemberRepository;
 import com.starsource.allbook.member.dto.MemberResponseDto;
 import com.starsource.allbook.member.dto.MemberSaveRequestDto;
 import com.starsource.allbook.member.dto.MemberUpdateRequestDto;
+import java.util.Optional;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final HttpSession httpSession;
 
     public MemberResponseDto saveMember(MemberSaveRequestDto requestDto) {
         memberRepository.findByEmail(requestDto.getEmail()).ifPresent(e -> {
@@ -41,5 +45,26 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow();
         return MemberResponseDto.of(member.updatePassword(oldPassword, password));
+    }
+
+    public MemberResponseDto findMemberById(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow();
+        return MemberResponseDto.of(member);
+    }
+
+    public MemberResponseDto findMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow();
+        return MemberResponseDto.of(member);
+    }
+
+    public void login(String email, String password) throws Exception {
+        Member member = memberRepository.findByEmail(email)
+                                .orElseThrow();
+        if(!member.getPassword().equals(password)) {
+            throw new Exception();
+        }
+        httpSession.setAttribute("user", new SessionUser(member));
     }
 }

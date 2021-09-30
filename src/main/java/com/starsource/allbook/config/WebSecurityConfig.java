@@ -1,7 +1,10 @@
 package com.starsource.allbook.config;
 
 import com.starsource.allbook.config.auth.CustomOAuth2UserService;
+import com.starsource.allbook.config.auth.filter.CustomAuthenticationFilter;
+import com.starsource.allbook.config.auth.filter.CustomLoginSuccessHandler;
 import com.starsource.allbook.member.domain.Role;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
@@ -18,6 +22,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final HttpSession httpSession;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -27,11 +32,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder encoder = getPasswordEncoder();
-        auth.inMemoryAuthentication()
-                .passwordEncoder(encoder)
-                .withUser("spring")
-                .password(encoder.encode("secret"))
-                .roles("MEMBER");
+        auth
+            .userDetailsService(customOAuth2UserService)
+            .passwordEncoder(encoder)
+        .and()
+            .inMemoryAuthentication()
+            .withUser("spring")
+            .password(encoder.encode("secret"))
+            .roles("MEMBER");
     }
 
     @Override
@@ -57,5 +65,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .oauth2Login()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
+    }
+
+    @Bean
+    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception{
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
+        customAuthenticationFilter.setFilterProcessesUrl("/user/login");
+        customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
+        customAuthenticationFilter.afterPropertiesSet();
+        return customAuthenticationFilter;
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customLoginSuccessHandler() {
+        return new CustomLoginSuccessHandler(httpSession);
     }
 }

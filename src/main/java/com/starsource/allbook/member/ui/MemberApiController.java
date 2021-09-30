@@ -8,9 +8,11 @@ import io.swagger.annotations.ApiOperation;
 import java.net.URI;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
@@ -32,6 +35,12 @@ public class MemberApiController {
         MemberResponseDto responseDto = memberService.saveMember(requestDto);
         return ResponseEntity.created(URI.create("/api/v1/members/" + responseDto.getId()))
                        .body(responseDto);
+    }
+
+    @ApiOperation(value = "회원 정보 조회")
+    @GetMapping("/api/v1/members/{id}")
+    public ResponseEntity<MemberResponseDto> findMemberById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(memberService.findMemberById(id));
     }
 
     @ApiOperation(value = "회원 탈퇴")
