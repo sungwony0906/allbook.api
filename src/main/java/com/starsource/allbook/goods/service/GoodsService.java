@@ -1,5 +1,6 @@
 package com.starsource.allbook.goods.service;
 
+import com.starsource.allbook.goods.domain.Goods;
 import com.starsource.allbook.goods.domain.GoodsRepository;
 import com.starsource.allbook.goods.dto.GoodsResponseDto;
 import com.starsource.allbook.goods.dto.GoodsSaveRequestDto;
@@ -26,5 +27,12 @@ public class GoodsService {
                        .stream()
                        .map(GoodsResponseDto::of)
                        .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public GoodsResponseDto findGoodsById(Long id) {
+        Goods goods = goodsRepository.findById(id)
+                              .orElseThrow();
+        return GoodsResponseDto.of(goods);
     }
 }
