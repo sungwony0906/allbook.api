@@ -133,6 +133,35 @@ class GoodsApiControllerTest {
         assertThat(responseDto.getEndDateTime()).isEqualTo(now.plusDays(1));
     }
 
+    @Test
+    void 상품_조회() throws Exception {
+        //given
+        long id = 1L;
+        String name = "anyName";
+        LocalDateTime now = LocalDateTime.now();
+        GoodsResponseDto mockResponseDto = makeGoodsResponseDto(name, now);
+
+        doReturn(mockResponseDto).when(goodsService).findGoodsById(id);
+
+        //when
+        MvcResult mvcResult = mockMvc.perform(get("/api/v1/goods/" + id))
+                                      .andExpect(status().isOk())
+                                      .andReturn();
+
+        //then
+        GoodsResponseDto responseDto = mapper.readValue(
+                mvcResult.getResponse().getContentAsString(),
+                new TypeReference<GoodsResponseDto>() {
+                });
+
+        assertThat(responseDto).isNotNull();
+        assertThat(responseDto.getId()).isEqualTo(1L);
+        assertThat(responseDto.getName()).isEqualTo(name);
+        assertThat(responseDto.getGoodsStatus()).isEqualTo(GoodsStatus.ACTIVE);
+        assertThat(responseDto.getStartDateTime()).isEqualTo(now);
+        assertThat(responseDto.getEndDateTime()).isEqualTo(now.plusDays(1));
+    }
+
     private GoodsResponseDto makeGoodsResponseDto(String name, LocalDateTime now) {
         GoodsResponseDto mockResponseDto = GoodsResponseDto.builder()
                                                    .id(1L)

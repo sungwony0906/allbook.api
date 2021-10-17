@@ -36,7 +36,7 @@ public class GoodsApiController {
     }
 
     @ApiOperation(value = "상품 정보 조회")
-    @GetMapping("/api/v1/goods/${id}")
+    @GetMapping("/api/v1/goods/{id}")
     public ResponseEntity<GoodsResponseDto> findGoodsById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(goodsService.findGoodsById(id));
     }
