@@ -2,6 +2,7 @@ package com.starsource.allbook.member.acceptance;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.starsource.allbook.common.AcceptanceTest;
 import com.starsource.allbook.member.domain.Address;
 import com.starsource.allbook.member.domain.MemberRepository;
 import com.starsource.allbook.member.domain.MemberStatus;
@@ -12,37 +13,19 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@WithMockUser(value = "spring", roles = "MEMBER")
-public class MemberApiAcceptanceTests {
-
-    @LocalServerPort
-    private int port;
+public class MemberApiAcceptanceTests extends AcceptanceTest {
 
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
     private PasswordEncoder encoder;
-
-    @BeforeEach
-    public void setUp() {
-        RestAssured.port = port;
-    }
 
     @AfterEach
     public void tearDown() {
