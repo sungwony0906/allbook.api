@@ -1,6 +1,7 @@
 package com.starsource.allbook.config.auth;
 
 import com.starsource.allbook.UserDetailsImpl;
+import com.starsource.allbook.common.exception.NotExistUserException;
 import com.starsource.allbook.config.auth.dto.OAuthAttributes;
 import com.starsource.allbook.config.auth.dto.SessionUser;
 import com.starsource.allbook.member.domain.Member;
@@ -60,7 +61,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email)
-                                .orElseThrow();
+                                .orElseThrow(() -> new NotExistUserException(email));
         return new UserDetailsImpl(member);
     }
 }

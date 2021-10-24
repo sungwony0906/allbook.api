@@ -10,6 +10,7 @@ import com.starsource.allbook.member.domain.Role;
 import com.starsource.allbook.member.dto.MemberResponseDto;
 import com.starsource.allbook.member.dto.MemberSaveRequestDto;
 import io.restassured.RestAssured;
+import io.restassured.authentication.FormAuthConfig;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
@@ -72,8 +73,6 @@ public class MemberApiAcceptanceTests extends AcceptanceTest {
                            .log().all()
                            .body(memberSaveRequestDto)
                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                       .auth()
-                           .form("spring", encoder.encode("secret"))
                        .when()
                            .post("/api/v1/members")
                        .then()
@@ -97,7 +96,7 @@ public class MemberApiAcceptanceTests extends AcceptanceTest {
                        .given()
                            .log().all()
                        .when()
-                           .get("/api/v1/members/"+responseDto.getId())
+                           .get("/api/v1/members/{id}", responseDto.getId())
                        .then()
                            .log().all()
                            .extract();

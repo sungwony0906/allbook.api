@@ -1,6 +1,7 @@
 package com.starsource.allbook.common;
 
 import io.restassured.RestAssured;
+import io.restassured.authentication.FormAuthConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,5 +23,9 @@ public abstract class AcceptanceTest {
     @BeforeEach
     public void setUp() {
         RestAssured.port = port;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        RestAssured.authentication = RestAssured.form("spring","secret",
+                new FormAuthConfig("/login", "username", "password")
+                        .withLoggingEnabled());
     }
 }

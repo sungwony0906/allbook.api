@@ -1,5 +1,7 @@
 package com.starsource.allbook.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.starsource.allbook.config.auth.CustomOAuth2UserService;
 import com.starsource.allbook.config.auth.filter.CustomAuthenticationFilter;
 import com.starsource.allbook.config.auth.filter.CustomLoginSuccessHandler;
@@ -9,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -32,14 +35,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder encoder = getPasswordEncoder();
-        auth
-            .userDetailsService(customOAuth2UserService)
-            .passwordEncoder(encoder)
-        .and()
-            .inMemoryAuthentication()
-            .withUser("spring")
-            .password(encoder.encode("secret"))
-            .roles("MEMBER");
+        auth.inMemoryAuthentication()
+                .withUser("spring")
+                .password(encoder.encode("secret"))
+                .roles("MEMBER");
+        auth.userDetailsService(customOAuth2UserService)
+            .passwordEncoder(getPasswordEncoder());
     }
 
     @Override
@@ -56,28 +57,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest()
                 .authenticated()
         .and()
-            .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+            .formLogin()
+                .permitAll()
         .and()
             .logout()
-                .logoutSuccessUrl("/")
         .and()
             .oauth2Login()
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
-    }
-
-    @Bean
-    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception{
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager());
-        customAuthenticationFilter.setFilterProcessesUrl("/user/login");
-        customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
-        customAuthenticationFilter.afterPropertiesSet();
-        return customAuthenticationFilter;
-    }
-
-    @Bean
-    public AuthenticationSuccessHandler customLoginSuccessHandler() {
-        return new CustomLoginSuccessHandler(httpSession);
     }
 }
